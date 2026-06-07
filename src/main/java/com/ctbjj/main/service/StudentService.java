@@ -14,6 +14,7 @@ import com.ctbjj.main.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public Page<StudentResponse> findAll(Pageable pageable) {
@@ -53,7 +55,7 @@ public class StudentService {
         User user = User.builder()
                 .name(req.name())
                 .email(req.email())
-                .passwordHash(req.password())
+                .passwordHash(passwordEncoder.encode(req.password()))
                 .role(UserRole.STUDENT)
                 .build();
 

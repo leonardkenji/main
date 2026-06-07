@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,17 +37,20 @@ public class ScheduleController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
     public ResponseEntity<ScheduleResponse> create(@Valid @RequestBody CreateScheduleRequest req) {
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.create(req));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
     public ResponseEntity<ScheduleResponse> update(@PathVariable UUID id,
                                                     @Valid @RequestBody UpdateScheduleRequest req) {
         return ResponseEntity.ok(scheduleService.update(id, req));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         scheduleService.delete(id);
         return ResponseEntity.noContent().build();

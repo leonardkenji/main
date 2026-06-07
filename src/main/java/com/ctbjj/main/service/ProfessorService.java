@@ -11,6 +11,7 @@ import com.ctbjj.main.exception.ResourceNotFoundException;
 import com.ctbjj.main.repository.ProfessorRepository;
 import com.ctbjj.main.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ public class ProfessorService {
 
     private final ProfessorRepository professorRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public List<ProfessorResponse> findAll() {
@@ -45,7 +47,7 @@ public class ProfessorService {
         User user = User.builder()
                 .name(req.name())
                 .email(req.email())
-                .passwordHash(req.password())
+                .passwordHash(passwordEncoder.encode(req.password()))
                 .role(UserRole.PROFESSOR)
                 .build();
 
