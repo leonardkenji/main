@@ -16,6 +16,7 @@ import java.util.UUID;
 public interface StudentRepository extends JpaRepository<Student, UUID> {
 
     Optional<Student> findByQrCodeToken(UUID qrCodeToken);
+    Optional<Student> findByUser_Email(String email);
 
     @Query("SELECT s FROM Student s JOIN s.user u WHERE LOWER(u.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     List<Student> searchByName(@Param("name") String name);

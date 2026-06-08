@@ -1,5 +1,6 @@
 package com.ctbjj.main.controller;
-
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import com.ctbjj.main.dto.request.CreateStudentRequest;
 import com.ctbjj.main.dto.request.UpdateStudentRequest;
 import com.ctbjj.main.dto.request.UpdateStudentStatusRequest;
@@ -70,4 +71,11 @@ public class StudentController {
         studentService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<StudentResponse> findMe(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(studentService.findMe(userDetails.getUsername()));
+    }
+
 }

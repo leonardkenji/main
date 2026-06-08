@@ -111,4 +111,11 @@ public class StudentService {
         return studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado: " + id));
     }
+
+    @Transactional(readOnly = true)
+    public StudentResponse findMe(String email) {
+        Student student = studentRepository.findByUser_Email(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado"));
+        return StudentResponse.from(student);
+    }
 }
